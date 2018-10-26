@@ -1,5 +1,8 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
 def makesubfield(n):
-    subfield = i2a.array.make2d(n//2,n)
+    subfield = np.zeros([n//2,n]  )
     
     subfield[0][n//2-1] = 1
     
@@ -22,20 +25,25 @@ def makesubfield(n):
     
     return subfield
 
-
+def makefield(n):
+    field = np.zeros([n,n])
+    subfield = makesubfield(n)
     
-subfield = makesubfield(1000)
+    for i in range(n//2):
+        field[2*i] = subfield[i]
+        field[2*i+1] = subfield[i]
+    
+    return field
 
-field = i2a.array.make2d(1000,1000)
+def reverse(field):
+    n = len(field)
+    field = field * (-1) + np.ones([n,n])
+    
+    return field
 
-for i in range(1000//2):
-    field[2*i] = subfield[i]
-    field[2*i+1] = subfield[i]
-
-newfield = i2a.array.make2d(1000,1000)
-for i in range(1000):
-    for j in range(1000):
-        newfield[i][j] = 1 - field[i][j]
-
-%matplotlib
-i2a.plot.image_show(newfield)
+def main(n):
+    field = makefield(n)
+    field = reverse(field)
+    plt.imshow(field, cmap = 'gray', vmin = 0, vmax = 1, interpolation = 'none')
+    plt.show()
+    
